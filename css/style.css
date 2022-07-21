@@ -17,7 +17,7 @@ body {
     padding: 0.5px;
     display: inline
     margin: 0.3px;
-    background-color: rgb(235, 196, 203);
+    /* background-color: rgb(235, 196, 203); */
 }
 
 .cell img {
@@ -26,8 +26,12 @@ body {
     /* display: none */
 }
 
-.shown {
+.open {
     background-color:  white
+}
+
+.close {
+    background-color: rgb(235, 196, 203);   
 }
 
 .modal {

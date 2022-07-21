@@ -1,41 +1,31 @@
 'use strict'
 
 const MINE = 'MINE'
-
-
 const MINE_IMG = '<img src="img/mine.png"/>'
 const ONE_IMG = '<img src="img/1.png"/>'
 const TWO_IMG = '<img src="img/2.png"/>'
-
-
 var gBoard
-var gElSelectedCell = null
 var gNextId = 0
-
-
-
-
-
+var gLevel = {
+    size: 4,
+    mines: 2
+}
 
 function initGame() {
     gBoard = buildBoard()
     renderBoard(gBoard)
     addMine()
-    // addNums()
-
-
-
 }
 
 function buildBoard() {
     // Create the Matrix
-    var board = createMat(4, 4)
+    var board = createMat(gLevel.size, gLevel.size)
     for (var i = 0; i < board.length; i++) {
         for (var j = 0; j < board[0].length; j++) {
             // Each cell:
             var cell = {
                 id: gNextId++,
-                minesCount: 0,
+                minesAroundCount: 0,
                 isShown: false,
                 isMine: false,
                 isMarked: false
@@ -52,55 +42,43 @@ function buildBoard() {
 }
 
 function addMine() {
-    const randLocation = getEmptyCell()
-    const cell = gBoard[randLocation.i][randLocation.j]
-    cell.isMine = true
+    var randLocations = []
+    for (var Idx = 0; Idx < gLevel.mines; Idx++) {
+        randLocations.push(getEmptyCell()) 
+        var cell = gBoard[randLocations[Idx].i][randLocations[Idx].j]
+        gBoard[randLocations[Idx].i][randLocations[Idx].j].isMine = true 
+    } 
+    console.log(randLocations)  
 }
 
-// function addMine() {
-//     for (var i = 0; i < gBoard.length; i++) {
-//         for (var j = 0; j < gBoard[0].length; j++) {
-//             const cell = gBoard[i][j]
-//             cell.gameElement = (Math.random() > 0.8) ? MINE : ''
-//         }
-//     }
-//     //MODEL
-//     if (cell.gameElement === MINE) cell.isMine = true
-//     //DOM
-//     if (cell.gameElement === MINE) renderCell(randLocation, MINE_IMG)
-// }
-
-function addNums() {
+function addMines() {
     for (var i = 0; i < gBoard.length; i++) {
         for (var j = 0; j < gBoard[0].length; j++) {
-            var num = setMinesNegsCount(gBoard, i, j)
             const cell = gBoard[i][j]
-            if (num === 0) renderCell(i, j, '')
-            if (num === 1) renderCell(i, j, ONE_IMG)
-            if (num === 2) renderCell(i, j, TWO_IMG)
+            cell.gameElement = (Math.random() > 0.8) ? MINE : ''
         }
     }
     //MODEL
-    cell.minesCount = num
+    if (cell.gameElement === MINE) cell.isMine = true
+    //DOM
+    if (cell.gameElement === MINE) renderCell(randLocation, MINE_IMG)
 }
 
 //counting neighbors:
 function setMinesNegsCount(board, rowIdx, colIdx) {
-    var minesAroundCount = 0
+    var minesCount = 0
     for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
         if (i < 0 || i > board.length - 1) continue
         for (var j = colIdx - 1; j <= colIdx + 1; j++) {
             if (j < 0 || j > board[0].length - 1) continue
             if (i === rowIdx && j === colIdx) continue
             var cell = board[i][j]
-            if (cell.isMine) minesAroundCount++
+            if (cell.isMine) minesCount++
         }
     }
-    // if (minesAroundCount === 0) minesAroundCount = ''
-    // if (minesAroundCount === 1) minesAroundCount = ONE_IMG 
-    // if (minesAroundCount === 2) minesAroundCount = TWO_IMG 
+    board[rowIdx][colIdx].minesAroundCount = minesCount 
     // console.log(minesAroundCount)
-    return minesAroundCount
+    return minesCount
 }
 
 // Render the board to an HTML table
@@ -109,17 +87,24 @@ function renderBoard() {
     for (var i = 0; i < gBoard.length; i++) {
         strHTML += '<tr>\n'
         for (var j = 0; j < gBoard[0].length; j++) {
-            const currCell = gBoard[i][j]
-            var className = (currCell.isShown) ? 'shown' : ''
-            strHTML += `\t<td class="cell ${className}" onclick="cellClicked(this, ${i}, ${j})" >\n`
+            var currCell = gBoard[i][j]
+            var className = (currCell.isShown) ? 'open' : 'close'
+            strHTML += `\t<td class="cell ${className}" onclick="cellClicked(this, ${i}, ${j})"  oncontextmenu="cellMarked(this, ${i}, ${j})" >\n`
             if (currCell.isShown) {
-                var num = setMinesNegsCount(gBoard, i, j)
+                setMinesNegsCount(gBoard, i, j)
                 if (currCell.isMine) {
                     strHTML += MINE_IMG
+                } else if (currCell.minesAroundCount === 0) {
+                    strHTML = strHTML 
+                } else if (currCell.minesAroundCount === 1) {
+                    strHTML += ONE_IMG
+                } else if (currCell.minesAroundCount === 2) {
+                    strHTML += TWO_IMG
                 } else {
-                    strHTML += num
+                    strHTML += currCell.minesAroundCount
                 }
-            }
+            } 
+            if (currCell.isMarked && !currCell.isShown) strHTML += '🚩' 
             strHTML += '\t</td>\n'
         }
         strHTML += '</tr>\n'
@@ -132,6 +117,13 @@ function cellClicked(elCell, i, j) {
     const cell = gBoard[i][j]
     //console.log('cell clicked: ', elCell, i, j)
     cell.isShown = true
+    renderBoard()
+}
+
+function cellMarked(elCell, i, j) {
+    const cell = gBoard[i][j]
+    cell.isMarked = true
+    cell.isShown = false
     renderBoard()
 }
 
@@ -168,7 +160,7 @@ function getEmptyCell() {
 //         for (var colIdx = 0; colIdx < board[0].length; colIdx++) {
 //             var cell = board[rowIdx][colIdx]
 //             if (cell.gameElement === MINE) continue
-//             store.push({ cell: { rowIdx, colIdx }, minesCount: setMinesNegsCount(gBoard, rowIdx, colIdx) })
+//             store.push({ cell: { rowIdx, colIdx }, Around: setMinesNegsCount(gBoard, rowIdx, colIdx) })
 //         }
 //     }
 //     console.log(store)
