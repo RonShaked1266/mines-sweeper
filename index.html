@@ -9,7 +9,8 @@
 
 <body onload="initGame()">
   <h1>Mine Sweeper</h1>
-  <button onclick="initGame()" class="play-again" hidden>😃</button>
+  <button id="btn" onclick="initGame()" class="play-again" hidden>😃</button>
+  <h3 id="title">Time: <span id="time"/></h3>
   <h2>Lives Left: <span class="counter-lives">❤❤❤</span></h2>
   <button onclick="supportLevel1()" class="level1">Beginner</button>
   <button onclick="supportLevel2()" class="level2">Medium</button>
@@ -20,7 +21,7 @@
   <div class="modal">
     <h3 class="name"> ~ Ron Shaked ~ </h3>
   </div>
-  <script src="js/util.js"></script> 
+  <script src="js/util.js"></script>
   <script src="js/app.js"></script>
 </body>
 
