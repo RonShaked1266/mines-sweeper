@@ -27,6 +27,7 @@ function initGame() {
     gGame.isOn = true
     gElInit.innerText = '😀'
     gElInit.hidden = false
+    timer()
 }
 
 //Support 3 levels of the game:
@@ -254,4 +255,24 @@ function getEmptyCell() {
     return emptyCells[randCellIdx]
 }
 
+//timer:
+function timer() {
+    var elLives = document.querySelector('.counter-lives')
+    var timer
+    var running = false
+    var elapsed = 0;
+    var span = document.getElementById('time');
+    document.getElementById('btn').addEventListener('click', function () {
+        if (running) {
+            clearInterval(timer)
+            running = false
+        } else {
+            timer = setInterval(function () {
+                elapsed++
+                span.textContent = elapsed
+            }, 1000)
+            running = true
+        }
+    })
+}
 
