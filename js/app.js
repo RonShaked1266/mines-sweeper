@@ -266,6 +266,7 @@ function timer() {
         if (running) {
             clearInterval(timer)
             running = false
+            gGame.secsPassed = elapsed
         } else {
             timer = setInterval(function () {
                 elapsed++
@@ -275,4 +276,5 @@ function timer() {
         }
     })
 }
+
 
