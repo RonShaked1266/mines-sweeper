@@ -1,53 +1,62 @@
-/* h1 {
-    display: none;
-} */
-
 body {
-    background-color: rgb(213, 234, 255);
+    background-color: rgb(250, 243, 248);
     color: black;
-    /* text-align: center */
+    text-align: center;
 }
-
 
 .cell {
     width: 40px;
     height: 40px;
     text-align: center;
     border: 3px solid rgb(2, 4, 82);
-    padding: 0.5px;
-    display: inline
-    margin: 0.3px;
-    /* background-color: rgb(235, 196, 203); */
+    padding: 1px;
 }
 
 .cell img {
     width: 25px;
     height: auto;
-    /* display: none */
 }
 
 .open {
-    background-color:  white
+    background-color: white
 }
 
 .close {
-    background-color: rgb(235, 196, 203);   
+    background-color: rgb(209, 253, 219);
 }
 
-.modal {
-    background-color: #a52a2a80;
-    width: 528px;
-    height: 440px;
-    position: absolute;
-    text-align: center;
-    display: none;
+.play-again {
+    background-color: rgb(171, 227, 235);
+    border: 2.5px solid rgb(2, 4, 82);
+    padding: 9px;
+    border-radius: 7px;
+    cursor: pointer;
 }
 
-.winning {
-    margin-top: 26%;
-    color: #1bff00;
+.level1 {
+    background-color: rgb(171, 227, 235);
+    border: 2.5px solid rgb(2, 4, 82);
+    padding: 7px;
+    border-radius: 7px;
+    cursor: pointer;
 }
 
-/* .play-again {
-     
-}*/
+.level2 {
+    background-color: rgb(171, 227, 235);
+    border: 2.5px solid rgb(2, 4, 82);
+    padding: 7px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.level3 {
+    background-color: rgb(171, 227, 235);
+    border: 2.5px solid rgb(2, 4, 82);
+    padding: 7px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.board {
+    margin: 20px auto;
+}
