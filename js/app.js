@@ -7,7 +7,7 @@ const THREE_IMG = '<img src="img/3.png"/>'
 
 var gBoard
 var gNextId = 0
-var gLivesCounter 
+var gLivesCounter = 3
 var gElSelected
 var gLevel = {
     size: 4,
@@ -20,15 +20,12 @@ var gGame = {
     secsPassed: 0
 }
 var gElInit = document.querySelector('.play-again')
-var elLives = document.querySelector('.counter-lives')
 
 //This is called when page loads
 function initGame() {
     supportLevel1()
     gGame.isOn = true
     gElInit.innerText = '😀'
-    elLives.innerText = '❤❤❤'
-    gLivesCounter = 3
     gElInit.hidden = false
     timer()
 }
@@ -175,13 +172,16 @@ function cellClicked(elCell, i, j) {
     if (cell.minesAroundCount === 0 && !cell.isMine) expandShown(gBoard, i, j)
     if (!cell.isMine) checkGameOver()
     if (cell.isMine) {
+        expandMines(gBoard)
+        console.log('Game Over')
+        gGame.isOn = false
         gElInit.innerText = '😣'
         gElSelected = (gElSelected !== elCell) ? elCell : null
     } else if (gElSelected && !gGame.isOn) {
         gElSelected.classList.display = none
     }
     var elLives = document.querySelector('.counter-lives')
-    if (gElInit.innerText === '😣') {
+    if (!gGame.isOn) {
         gLivesCounter--
         if (gLivesCounter == 2) {
             elLives.innerText = '❤❤'
@@ -189,10 +189,7 @@ function cellClicked(elCell, i, j) {
             elLives.innerText = '❤'
         } else if (gLivesCounter == 0) {
             elLives.innerText = '⛔'
-            console.log('Game Over')
-            gGame.isOn = false
-            // gElInit.hidden = true
-            expandMines(gBoard)
+            gElInit.hidden = true
         }
     }
     renderBoard()
