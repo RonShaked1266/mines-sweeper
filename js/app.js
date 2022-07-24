@@ -29,7 +29,6 @@ function initGame() {
     gElInit.innerText = '😀'
     gElLives.innerText = '❤❤❤'
     gLivesCounter = 3
-    gElInit.hidden = false
     timer()
 }
 
@@ -181,7 +180,6 @@ function cellClicked(elCell, i, j) {
     } else if (gElSelected && !gGame.isOn) {
         gElSelected.classList.display = none
     }
-    
     if (gElInit.innerText === '😣') {
         if (gLivesCounter == 2) {
             gElLives.innerText = '❤❤'
@@ -191,7 +189,6 @@ function cellClicked(elCell, i, j) {
             gElLives.innerText = '⛔'
             console.log('Game Over')
             gGame.isOn = false
-            // gElInit.hidden = true
             expandMines(gBoard)
         }
     }
